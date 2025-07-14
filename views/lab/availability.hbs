@@ -126,7 +126,7 @@ document.getElementById('dateTimeForm').addEventListener('submit', function(e) {
   e.preventDefault();
   const date = document.getElementById('selectedDate').value;
   const time = document.getElementById('selectedTime').value;
-  window.location.href = `/lab/availability/{{lab._id}}?date=${date}&time=${time}`;
+  window.location.href = `/lab/{{lab._id}}/availability?date=${date}&time=${time}`;
 });
 </script>
     
