@@ -24,10 +24,10 @@
       
       <div class="d-flex justify-content-between align-items-center">
         <div class="btn-group" role="group">
-          <a href="/lab/availability/{{this._id}}" class="btn btn-primary">View Availability</a>
+          <a href="/lab/{{this._id}}/availability" class="btn btn-primary">View Availability</a>
           {{#if ../user}}
             {{#if (eq ../user.role 'student')}}
-              <a href="/lab/availability/{{this._id}}" class="btn btn-secondary">Reserve Now</a>
+              <a href="/reservation/reserve/{{this._id}}" class="btn btn-secondary">Reserve Now</a>
             {{/if}}
           {{/if}}
         </div>
