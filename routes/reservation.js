@@ -3,6 +3,8 @@ const router = express.Router();
 const reservationController = require('../controllers/reservationController');
 const searchController = require('../controllers/searchController');
 
+router.get('/reserve/:labId', reservationController.getReserveForm);
+
 router.post('/reserve', reservationController.createReservation);
 
 router.get('/my', reservationController.getUserReservations);
