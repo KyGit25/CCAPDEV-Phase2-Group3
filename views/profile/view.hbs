@@ -122,26 +122,3 @@ function deleteAccount() {
   }
 }
 </script>
-                                        <td>{{this.seatNumber}}</td>
-                                        <td>{{this.startTime}}</td>
-                                        <td>{{this.startTime}} - {{this.endTime}}</td>
-                                        <td>
-                                            {{#if this.isAnonymous}}
-                                                <span class="badge bg-secondary">Anonymous</span>
-                                            {{else}}
-                                                <span class="badge bg-success">Public</span>
-                                            {{/if}}
-                                        </td>
-                                    </tr>
-                                    {{/each}}
-                                </tbody>
-                            </table>
-                        </div>
-                    {{else}}
-                        <p class="text-muted">No reservations found.</p>
-                    {{/if}}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
