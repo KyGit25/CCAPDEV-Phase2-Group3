@@ -2,14 +2,10 @@ const Reservation = require('../models/Reservation');
 const Lab = require('../models/Lab');
 const User = require('../models/User');
 
-/**
- * Search available slots for a lab on a given date and time
- */
 exports.searchFreeSlots = async (req, res) => {
   const { labId, date, time } = req.query;
 
   try {
-    // Always load labs for the search form
     const labs = await Lab.find();
 
     if (!labId || !date || !time) {
@@ -48,9 +44,6 @@ exports.searchFreeSlots = async (req, res) => {
   }
 };
 
-/**
- * Search for users by email
- */
 exports.searchUsers = async (req, res) => {
   const { query } = req.query;
 
