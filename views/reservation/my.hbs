@@ -1,0 +1,56 @@
+<div class="container mt-4">
+    <h2 class="text-center mb-4">My Reservations</h2>
+    
+    {{#if reservations}}
+        <div class="row">
+            {{#each reservations}}
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>{{this.lab.name}} - Seat {{this.seatNumber}}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Date:</strong> {{this.startTime}}</p>
+                            <p><strong>Time:</strong> {{this.startTime}} - {{this.endTime}}</p>
+                            <p><strong>Status:</strong> 
+                                {{#if this.isAnonymous}}
+                                    <span class="badge bg-secondary">Anonymous</span>
+                                {{else}}
+                                    <span class="badge bg-success">Public</span>
+                                {{/if}}
+                            </p>
+                            <p><strong>Created:</strong> {{this.createdAt}}</p>
+                            
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-sm btn-primary" onclick="editReservation('{{this._id}}')">Edit</button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteReservation('{{this._id}}')">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    {{else}}
+        <div class="text-center">
+            <div class="card">
+                <div class="card-body">
+                    <h5>No Reservations Found</h5>
+                    <p class="text-muted">You don't have any reservations yet.</p>
+                    <a href="/lab" class="btn btn-primary">Browse Labs</a>
+                </div>
+            </div>
+        </div>
+    {{/if}}
+</div>
+
+<script>
+function editReservation(reservationId) {
+    window.location.href = `/reservation/${reservationId}/edit`;
+}
+
+function deleteReservation(reservationId) {
+    if (confirm('Are you sure you want to cancel this reservation?')) {
+        window.location.href = `/reservation/${reservationId}/delete`;
+    }
+}
+</script>

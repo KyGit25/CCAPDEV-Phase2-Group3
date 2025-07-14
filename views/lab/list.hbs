@@ -1,0 +1,21 @@
+<div class="container mt-4">
+    <h2>Computer Labs</h2>
+    <p class="text-muted">Select a lab to view availability and make reservations</p>
+    
+    <div class="row">
+        {{#each labs}}
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{this.name}}</h5>
+                    <p class="card-text">{{this.description}}</p>
+                    <p class="card-text">
+                        <small class="text-muted">{{this.seats.length}} seats available</small>
+                    </p>
+                    <a href="/lab/{{this._id}}/availability" class="btn btn-primary">View Availability</a>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>

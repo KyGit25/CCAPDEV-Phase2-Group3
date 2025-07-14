@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}} | DLSU Lab Reservation</title>
+    <link rel="stylesheet" href="../../public/css/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="/assets/logo.png" width="30" height="30" alt="Logo">
+                DLSU Lab Reservation
+            </a>
+            
+            <div class="navbar-nav ms-auto">
+                    {{#if user}}
+                        {{#if (eq user.role 'student')}}
+                        <a class="nav-link" href="/lab">Labs</a>
+                        <a class="nav-link" href="/reservation/my">My Reservations</a>
+                        <a class="nav-link" href="/profile">Profile</a>
+                        <a class="nav-link" href="/search/slots">Search</a>
+                        {{else}}
+                        <a class="nav-link" href="/lab">Labs</a>
+                        <a class="nav-link" href="/reservation/my">My Reservations</a>
+                        <a class="nav-link" href="/profile">Profile</a>
+                        <a class="nav-link" href="/search/slots">Search</a>
+                        {{/if}}
+                        <a class="nav-link" href="/auth/logout">Logout</a>
+                    {{else}}
+                        <a class="nav-link" href="/auth/login">Login</a>
+                        <a class="nav-link" href="/auth/register">Register</a>
+                    {{/if}}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {{#if user}}
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Welcome to Lab Reservation System</h1>
+                    <p class="lead">Manage your lab reservations easily</p>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">View Labs</h5>
+                            <p class="card-text">Browse available computer labs and check seat availability</p>
+                            <a href="/lab" class="btn btn-primary">View Labs</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">My Reservations</h5>
+                            <p class="card-text">View and manage your current reservations</p>
+                            <a href="/reservation/my" class="btn btn-primary">View Reservations</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Search</h5>
+                            <p class="card-text">Find available slots and users</p>
+                            <a href="/search/slots" class="btn btn-primary">Search</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{else}}
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h1>DLSU Lab Reservation System</h1>
+                    <p class="lead">Please login to access the system</p>
+                    <a href="/auth/login" class="btn btn-primary">Login</a>
+                    <a href="/auth/register" class="btn btn-secondary">Register</a>
+                </div>
+            </div>
+        {{/if}}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

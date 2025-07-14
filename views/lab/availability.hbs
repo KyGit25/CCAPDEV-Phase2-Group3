@@ -1,0 +1,98 @@
+<div class="container mt-4">
+    <h2>{{lab.name}} - Seat Availability</h2>
+    <p class="text-muted">{{lab.description}}</p>
+    
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="dateInput" class="form-label">Select Date:</label>
+            <input type="date" class="form-control" id="dateInput" value="{{date}}">
+        </div>
+        <div class="col-md-6">
+            <label for="timeInput" class="form-label">Select Time:</label>
+            <input type="time" class="form-control" id="timeInput" step="1800">
+        </div>
+    </div>
+    
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <button class="btn btn-primary" onclick="updateAvailability()">Check Availability</button>
+        </div>
+    </div>
+    
+    <div class="row">
+        {{#each lab.seats}}
+        <div class="col-md-3 mb-3">
+            <div class="card seat-card" data-seat="{{this}}">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Seat {{this}}</h5>
+                    <div class="seat-status" id="seat-{{this}}">
+                        <span class="badge bg-success">Available</span>
+                    </div>
+                    {{#if ../user}}
+                        {{#eq ../user.role 'student'}}
+                        <button class="btn btn-sm btn-primary mt-2 reserve-btn" data-seat="{{this}}" onclick="reserveSeat({{this}})">Reserve</button>
+                        {{/eq}}
+                        {{#eq ../user.role 'technician'}}
+                        <button class="btn btn-sm btn-warning mt-2 reserve-btn" data-seat="{{this}}" onclick="reserveForStudent({{this}})">Reserve for Student</button>
+                        {{/eq}}
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>
+
+<script>
+function updateAvailability() {
+    const date = document.getElementById('dateInput').value;
+    const time = document.getElementById('timeInput').value;
+    const labId = '{{lab._id}}';
+    
+    if (date && time) {
+        window.location.href = `/lab/${labId}/availability?date=${date}&time=${time}`;
+    }
+}
+
+function reserveSeat(seatNumber) {
+    const date = document.getElementById('dateInput').value;
+    const time = document.getElementById('timeInput').value;
+    const labId = '{{lab._id}}';
+    
+    if (date && time) {
+        // Create reservation form
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/reservation/create';
+        
+        // Add hidden fields
+        const fields = [
+            { name: 'labId', value: labId },
+            { name: 'seatNumber', value: seatNumber },
+            { name: 'date', value: date },
+            { name: 'time', value: time }
+        ];
+        
+        fields.forEach(field => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = field.name;
+            input.value = field.value;
+            form.appendChild(input);
+        });
+        
+        document.body.appendChild(form);
+        form.submit();
+    } else {
+        alert('Please select both date and time');
+    }
+}
+
+function reserveForStudent(seatNumber) {
+    const studentEmail = prompt('Enter student email:');
+    if (studentEmail) {
+        // Handle technician reservation for student
+        reserveSeat(seatNumber);
+    }
+}
+</script>

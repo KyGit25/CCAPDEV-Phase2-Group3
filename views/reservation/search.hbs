@@ -1,0 +1,118 @@
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Search</h2>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Search for Available Slots</h5>
+                </div>
+                <div class="card-body">
+                    <form action="/search/slots" method="GET">
+                        <div class="mb-3">
+                            <label for="labId" class="form-label">Lab</label>
+                            <select class="form-select" name="labId" required>
+                                <option value="">Select a lab</option>
+                                {{#each labs}}
+                                    <option value="{{this._id}}">{{this.name}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="date" class="form-label">Date</label>
+                            <input type="date" class="form-control" name="date" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="time" class="form-label">Time</label>
+                            <input type="time" class="form-control" name="time" required>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Search Slots</button>
+                    </form>
+                    
+                    {{#if availableSeats}}
+                        <div class="mt-3">
+                            <h6>Available Seats in {{lab.name}}</h6>
+                            <div class="row">
+                                {{#each availableSeats}}
+                                    <div class="col-md-6 mb-2">
+                                        <div class="card">
+                                            <div class="card-body text-center">
+                                                <h6>Seat {{this}}</h6>
+                                                <button class="btn btn-sm btn-primary" onclick="reserveSeat({{this}})">Reserve</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {{/each}}
+                            </div>
+                        </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Search for Users</h5>
+                </div>
+                <div class="card-body">
+                    <form action="/search/users" method="GET">
+                        <div class="mb-3">
+                            <label for="q" class="form-label">Search Query</label>
+                            <input type="text" class="form-control" name="q" placeholder="Enter email or description..." required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Search Users</button>
+                    </form>
+                    
+                    {{#if users}}
+                        <div class="mt-3">
+                            <h6>Search Results</h6>
+                            {{#each users}}
+                                <div class="card mb-2">
+                                    <div class="card-body">
+                                        <h6><a href="/profile/{{this._id}}/public">{{this.email}}</a></h6>
+                                        <p class="text-muted">{{this.role}}</p>
+                                        <p>{{this.description}}</p>
+                                    </div>
+                                </div>
+                            {{/each}}
+                        </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function reserveSeat(seatNumber) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const labId = urlParams.get('labId');
+    const date = urlParams.get('date');
+    const time = urlParams.get('time');
+    
+    if (labId && date && time) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/reservation/create';
+        
+        const fields = [
+            { name: 'labId', value: labId },
+            { name: 'seatNumber', value: seatNumber },
+            { name: 'date', value: date },
+            { name: 'time', value: time }
+        ];
+        
+        fields.forEach(field => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = field.name;
+            input.value = field.value;
+            form.appendChild(input);
+        });
+        
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+</script>

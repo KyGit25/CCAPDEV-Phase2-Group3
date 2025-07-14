@@ -1,0 +1,73 @@
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <img src="{{user.profilePic}}" class="rounded-circle mb-3" width="100" height="100" alt="Profile Picture">
+                    <h5 class="card-title">{{user.email}}</h5>
+                    <p class="card-text">{{user.role}}</p>
+                    {{#unless isPublic}}
+                        <a href="/profile/edit" class="btn btn-primary">Edit Profile</a>
+                        <a href="/profile/delete" class="btn btn-danger mt-2" onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.')">Delete Account</a>
+                    {{/unless}}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Profile Information</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Email:</strong> {{user.email}}</p>
+                    <p><strong>Role:</strong> {{user.role}}</p>
+                    <p><strong>Description:</strong> {{user.description}}</p>
+                    <p><strong>Member since:</strong> {{user.createdAt}}</p>
+                </div>
+            </div>
+            
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h5>{{#if isPublic}}Public {{/if}}Reservations</h5>
+                </div>
+                <div class="card-body">
+                    {{#if reservations}}
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Lab</th>
+                                        <th>Seat</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each reservations}}
+                                    <tr>
+                                        <td>{{this.lab.name}}</td>
+                                        <td>{{this.seatNumber}}</td>
+                                        <td>{{this.startTime}}</td>
+                                        <td>{{this.startTime}} - {{this.endTime}}</td>
+                                        <td>
+                                            {{#if this.isAnonymous}}
+                                                <span class="badge bg-secondary">Anonymous</span>
+                                            {{else}}
+                                                <span class="badge bg-success">Public</span>
+                                            {{/if}}
+                                        </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    {{else}}
+                        <p class="text-muted">No reservations found.</p>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
