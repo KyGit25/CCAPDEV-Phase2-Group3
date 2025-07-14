@@ -3,8 +3,6 @@ const { engine } = require('express-handlebars');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const path = require('path');
-const exphbs = require('express-handlebars');
-const Handlebars = require('handlebars');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
