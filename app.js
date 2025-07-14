@@ -7,14 +7,12 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// MongoDB connection
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/lab_reservation';
 
 mongoose.connect(MONGO_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// Handlebars engine setup
 app.engine('hbs', engine({
   defaultLayout: 'main',
   extname: '.hbs',
@@ -51,23 +49,20 @@ app.engine('hbs', engine({
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Session configuration
 app.use(session({
   secret: process.env.SESSION_SECRET || 'lab-reservation-secret-key',
   resave: false,
   saveUninitialized: false,
   cookie: { 
-    secure: false, // Set to true in production with HTTPS
-    maxAge: 1000 * 60 * 60 * 24 // 24 hours default
+    secure: false, 
+    maxAge: 1000 * 60 * 60 * 24 
   }
 }));
 
-// Global middleware to make user session available in views
 app.use(async (req, res, next) => {
   if (req.session.userId) {
     try {
@@ -90,7 +85,6 @@ app.use(async (req, res, next) => {
   next();
 });
 
-// Authentication middleware
 const requireAuth = (req, res, next) => {
   if (!req.session.userId) {
     return res.redirect('/auth/login');
@@ -98,7 +92,6 @@ const requireAuth = (req, res, next) => {
   next();
 };
 
-// Routes
 app.get('/', async (req, res) => {
   try {
     const Lab = require('./models/Lab');
@@ -174,7 +167,6 @@ app.use('/profile', requireAuth, userRoutes);
 const searchRoutes = require('./routes/search');
 app.use('/search', requireAuth, searchRoutes);
 
-// Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).render('error', { 
@@ -183,7 +175,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 404 handler
 app.use((req, res) => {
   res.status(404).render('error', { 
     title: 'Page Not Found',
@@ -191,7 +182,6 @@ app.use((req, res) => {
   });
 });
 
-// Start server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
