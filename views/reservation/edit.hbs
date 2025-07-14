@@ -1,12 +1,8 @@
 
-{{#extend "title"}}Edit Reservation{{/extend}}
-
 <div class="main-container">
   <h2 class="text-center mb-4">Edit Reservation</h2>
 
-  <form id="editReservationForm" action="/reservation/{{reservation._id}}/edit" method="POST">
-    <input type="hidden" name="_method" value="PUT">
-
+  <form id="editReservationForm" action="/reservation/edit/{{reservation._id}}" method="POST">
     <div class="mb-3">
       <label class="form-label">Lab</label>
       <select class="form-select" name="lab" required>
