@@ -333,7 +333,6 @@ table {
   border: 1px solid black;
 }
 
-/* Form Styling */
 .form-control {
   border-radius: 10px;
   border: 2px solid #e0e0e0;
@@ -367,7 +366,6 @@ table {
   color: #666;
 }
 
-/* Button Styles */
 .btn-primary {
   background-color: #7ed957;
   border-color: #7ed957;
@@ -428,7 +426,6 @@ table {
   box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
 }
 
-/* Card Styles */
 .card {
   border-radius: 15px;
   border: none;
@@ -449,7 +446,6 @@ table {
   padding: 30px;
 }
 
-/* Lab Grid Styles */
 .lab-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -483,7 +479,6 @@ table {
   font-size: 14px;
 }
 
-/* Seat Grid */
 .seat-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
@@ -527,7 +522,6 @@ table {
   border-color: #0056b3;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .main-container {
     width: 95%;
@@ -557,7 +551,6 @@ table {
   }
 }
 
-/* Utility Classes */
 .text-center {
   text-align: center;
 }
@@ -594,7 +587,6 @@ table {
   color: #6c757d;
 }
 
-/* Loading Animation */
 .loading {
   display: inline-block;
   width: 20px;
@@ -610,7 +602,6 @@ table {
   100% { transform: rotate(360deg); }
 }
 
-/* Alert Styles */
 .alert {
   padding: 15px;
   border-radius: 10px;

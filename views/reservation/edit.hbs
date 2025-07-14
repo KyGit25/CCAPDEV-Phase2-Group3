@@ -7,7 +7,6 @@
   <form id="editReservationForm" action="/reservation/{{reservation._id}}/edit" method="POST">
     <input type="hidden" name="_method" value="PUT">
 
-    {{!-- Lab Selection (Matches populated lab data) --}}
     <div class="mb-3">
       <label class="form-label">Lab</label>
       <select class="form-select" name="lab" required>
@@ -19,28 +18,24 @@
       </select>
     </div>
 
-    {{!-- Seat Number (Matches reservation.seatNumber) --}}
     <div class="mb-3">
       <label class="form-label">Seat Number</label>
       <input type="number" class="form-control" name="seatNumber" 
              value="{{reservation.seatNumber}}" min="1" required>
     </div>
 
-    {{!-- Start Time (Uses ISO-formatted datetime) --}}
     <div class="mb-3">
       <label class="form-label">Start Time</label>
       <input type="datetime-local" class="form-control" name="startTime" required
              value="{{reservation.startTimeISO}}">
     </div>
 
-    {{!-- End Time (Auto-calculated in controller) --}}
     <div class="mb-3">
       <label class="form-label">End Time</label>
       <input type="datetime-local" class="form-control" name="endTime" readonly
              value="{{reservation.endTimeISO}}">
     </div>
 
-    {{!-- Anonymous Option (Only for students) --}}
     {{#if (eq user.userType 'student')}}
       <div class="form-check mb-3">
         <input class="form-check-input" type="checkbox" name="isAnonymous" 

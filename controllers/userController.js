@@ -1,9 +1,6 @@
 const User = require('../models/User');
 const Reservation = require('../models/Reservation');
 
-/**
- * View current user's profile
- */
 exports.viewOwnProfile = async (req, res) => {
   try {
     const user = await User.findById(req.session.userId);
@@ -23,9 +20,7 @@ exports.viewOwnProfile = async (req, res) => {
   }
 };
 
-/**
- * View another user's public profile
- */
+
 exports.viewPublicProfile = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -49,9 +44,6 @@ exports.viewPublicProfile = async (req, res) => {
   }
 };
 
-/**
- * Render edit profile page
- */
 exports.getEditProfile = async (req, res) => {
   try {
     const user = await User.findById(req.session.userId);
@@ -65,9 +57,6 @@ exports.getEditProfile = async (req, res) => {
   }
 };
 
-/**
- * Update user profile
- */
 exports.updateProfile = async (req, res) => {
   const { description, anonymous } = req.body;
 
@@ -88,17 +77,14 @@ exports.updateProfile = async (req, res) => {
   }
 };
 
-/**
- * Delete user and reservations
- */
 exports.deleteProfile = async (req, res) => {
   try {
     const userId = req.session.userId;
 
-    // Cancel all future reservations
+
     await Reservation.deleteMany({ user: userId });
     
-    // Delete user account
+
     await User.findByIdAndDelete(userId);
 
     req.session.destroy(() => {

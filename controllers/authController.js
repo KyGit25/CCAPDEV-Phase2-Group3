@@ -1,8 +1,5 @@
 const User = require('../models/User');
 
-/**
- * Render login page
- */
 exports.getLogin = (req, res) => {
   res.render('auth/login', { 
     title: 'Login',
@@ -10,9 +7,6 @@ exports.getLogin = (req, res) => {
   });
 };
 
-/**
- * Render registration page
- */
 exports.getRegister = (req, res) => {
   res.render('auth/register', { 
     title: 'Register',
@@ -20,13 +14,9 @@ exports.getRegister = (req, res) => {
   });
 };
 
-/**
- * Register a new user
- */
 exports.postRegister = async (req, res) => {
   const { email, password, confirmPassword, role, description } = req.body;
 
-  // Validation
   if (!email || !password || !role) {
     return res.render('auth/register', {
       title: 'Register',
@@ -78,9 +68,6 @@ exports.postRegister = async (req, res) => {
   }
 };
 
-/**
- * Login user
- */
 exports.postLogin = async (req, res) => {
   const { email, password, remember } = req.body;
 
@@ -106,7 +93,7 @@ exports.postLogin = async (req, res) => {
     req.session.role = user.role;
 
     if (remember) {
-      req.session.cookie.maxAge = 1000 * 60 * 60 * 24 * 21; // 3 weeks
+      req.session.cookie.maxAge = 1000 * 60 * 60 * 24 * 21; 
     }
 
     res.redirect('/dashboard');
@@ -120,9 +107,6 @@ exports.postLogin = async (req, res) => {
   }
 };
 
-/**
- * Logout user
- */
 exports.logout = (req, res) => {
   req.session.destroy(() => {
     res.redirect('/auth/login');

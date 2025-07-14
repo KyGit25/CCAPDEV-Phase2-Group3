@@ -2,9 +2,6 @@ const Reservation = require('../models/Reservation');
 const Lab = require('../models/Lab');
 const User = require('../models/User');
 
-/**
- * Create reservation (student or technician)
- */
 exports.createReservation = async (req, res) => {
   try {
     const { labId, selectedDate, selectedTime, selectedSeats, isAnonymous } = req.body;
@@ -13,16 +10,13 @@ exports.createReservation = async (req, res) => {
       return res.status(400).send('Missing required fields');
     }
 
-    // Parse selected seats
     const seatNumbers = selectedSeats.split(',').map(Number);
-    
-    // Parse date and time into start and end times
+
     const [hours, minutes] = selectedTime.split(':').map(Number);
     const startTime = new Date(selectedDate);
     startTime.setHours(hours, minutes, 0, 0);
-    const endTime = new Date(startTime.getTime() + 30 * 60 * 1000); // Add 30 minutes
+    const endTime = new Date(startTime.getTime() + 30 * 60 * 1000); 
 
-    // Check if any seat is already reserved
     const existingReservations = await Reservation.find({
       lab: labId,
       seatNumber: { $in: seatNumbers },
@@ -34,7 +28,6 @@ exports.createReservation = async (req, res) => {
       return res.status(400).send('One or more seats are already reserved for this time slot');
     }
 
-    // Create reservations for all selected seats
     const reservations = seatNumbers.map(seatNumber => ({
       user: req.session.userId,
       lab: labId,
@@ -61,7 +54,6 @@ exports.getEditReservation = async (req, res) => {
 
     if (!reservation) return res.status(404).send('Reservation not found');
 
-    // Format dates for HTML inputs
     reservation.startTimeISO = reservation.startTime.toISOString().slice(0, 16);
     reservation.endTimeISO = reservation.endTime.toISOString().slice(0, 16);
 
@@ -76,9 +68,7 @@ exports.getEditReservation = async (req, res) => {
   }
 };
 
-/**
- * Edit reservation (student or technician)
- */
+
 exports.editReservation = async (req, res) => {
   try {
     const { id } = req.params;
@@ -103,9 +93,7 @@ exports.editReservation = async (req, res) => {
   }
 };
 
-/**
- * Delete reservation (by student or technician with 10-min grace)
- */
+
 exports.deleteReservation = async (req, res) => {
   try {
     const { id } = req.params;
@@ -128,9 +116,6 @@ exports.deleteReservation = async (req, res) => {
   }
 };
 
-/**
- * View reservations for logged-in user
- */
 exports.viewMyReservations = async (req, res) => {
   try {
     const reservations = await Reservation.find({ user: req.session.userId })
@@ -147,9 +132,6 @@ exports.viewMyReservations = async (req, res) => {
   }
 };
 
-/**
- * Get user's reservations
- */
 exports.getUserReservations = async (req, res) => {
   try {
     const reservations = await Reservation.find({ user: req.session.userId })
@@ -167,9 +149,6 @@ exports.getUserReservations = async (req, res) => {
   }
 };
 
-/**
- * Get all reservations (for technicians)
- */
 exports.getAllReservations = async (req, res) => {
   try {
     if (req.session.role !== 'technician') {
@@ -191,9 +170,7 @@ exports.getAllReservations = async (req, res) => {
   }
 };
 
-/**
- * View single reservation
- */
+
 exports.viewReservation = async (req, res) => {
   try {
     const reservation = await Reservation.findById(req.params.id)
@@ -204,7 +181,6 @@ exports.viewReservation = async (req, res) => {
       return res.status(404).send('Reservation not found');
     }
 
-    // Check if user can view this reservation
     const isOwner = reservation.user._id.toString() === req.session.userId;
     const isTech = req.session.role === 'technician';
     
@@ -222,9 +198,7 @@ exports.viewReservation = async (req, res) => {
   }
 };
 
-/**
- * Reserve for student (technician only)
- */
+
 exports.reserveForStudent = async (req, res) => {
   try {
     if (req.session.role !== 'technician') {
@@ -233,22 +207,20 @@ exports.reserveForStudent = async (req, res) => {
 
     const { studentEmail, labId, selectedDate, selectedTime, selectedSeats } = req.body;
 
-    // Find the student
     const student = await User.findOne({ email: studentEmail, role: 'student' });
     if (!student) {
       return res.status(400).send('Student not found');
     }
 
-    // Parse selected seats
     const seatNumbers = selectedSeats.split(',').map(Number);
     
-    // Parse date and time into start and end times
+
     const [hours, minutes] = selectedTime.split(':').map(Number);
     const startTime = new Date(selectedDate);
     startTime.setHours(hours, minutes, 0, 0);
     const endTime = new Date(startTime.getTime() + 30 * 60 * 1000);
 
-    // Check if any seat is already reserved
+
     const existingReservations = await Reservation.find({
       lab: labId,
       seatNumber: { $in: seatNumbers },
@@ -260,7 +232,7 @@ exports.reserveForStudent = async (req, res) => {
       return res.status(400).send('One or more seats are already reserved for this time slot');
     }
 
-    // Create reservations for all selected seats
+
     const reservations = seatNumbers.map(seatNumber => ({
       user: student._id,
       lab: labId,
@@ -279,9 +251,7 @@ exports.reserveForStudent = async (req, res) => {
   }
 };
 
-/**
- * Remove reservation (technician only, with 10-min grace period)
- */
+
 exports.removeReservation = async (req, res) => {
   try {
     if (req.session.role !== 'technician') {
@@ -293,7 +263,7 @@ exports.removeReservation = async (req, res) => {
       return res.status(404).send('Reservation not found');
     }
 
-    // Check if within 10-minute grace period
+
     const now = new Date();
     const reservationTime = new Date(reservation.startTime);
     const timeDiff = now - reservationTime;

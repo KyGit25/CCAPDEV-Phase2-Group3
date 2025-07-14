@@ -1,4 +1,3 @@
-// seed/seed.js
 const mongoose = require('mongoose');
 const User = require('../models/User');
 const Lab = require('../models/Lab');
