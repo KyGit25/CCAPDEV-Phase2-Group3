@@ -18,6 +18,10 @@ app.engine('hbs', engine({
   extname: '.hbs',
   partialsDir: path.join(__dirname, 'views/partials'),
   layoutsDir: path.join(__dirname, 'views/layouts'),
+  runtimeOptions: {
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true,
+  },
   helpers: {
     eq: function (a, b) {
       return a === b;
