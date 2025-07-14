@@ -498,6 +498,7 @@ table {
   cursor: pointer;
   transition: all 0.3s ease;
   border: 2px solid transparent;
+  position: relative;
 }
 
 .seat.available {
@@ -520,6 +521,39 @@ table {
   background-color: #007bff;
   color: white;
   border-color: #0056b3;
+}
+
+/* Seat tooltip styling */
+.seat-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.seat.occupied:hover .seat-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.seat-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.8);
 }
 
 @media (max-width: 768px) {
