@@ -3,6 +3,8 @@ const { engine } = require('express-handlebars');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const path = require('path');
+const exphbs = require('express-handlebars');
+const Handlebars = require('handlebars');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -46,6 +48,10 @@ app.engine('hbs', engine({
         minute: '2-digit'
       });
     }
+  },
+  runtimeOptions: {
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true
   }
 }));
 app.set('view engine', 'hbs');
