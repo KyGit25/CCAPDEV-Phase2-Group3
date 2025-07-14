@@ -50,10 +50,6 @@ app.engine('hbs', engine({
         minute: '2-digit'
       });
     }
-  },
-  runtimeOptions: {
-    allowProtoPropertiesByDefault: true,
-    allowProtoMethodsByDefault: true
   }
 }));
 app.set('view engine', 'hbs');
