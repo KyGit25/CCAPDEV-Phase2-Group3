@@ -10,12 +10,12 @@
     {{#if user}}
       {{#if (eq user.role 'student')}}
         <a class="link" href="/lab/list">Labs</a>
-        <a class="link" href="/reservation/search">Search</a>
+        <a class="link" href="/search/slots">Search</a>
         <a class="link" href="/reservation/my">My Reservations</a>
       {{else}}
         <a class="link" href="/lab/list">Manage Labs</a>
         <a class="link" href="/reservation/all">All Reservations</a>
-        <a class="link" href="/reservation/search">Search</a>
+        <a class="link" href="/search/slots">Search</a>
       {{/if}}
       
       <div class="nav-ellipsis-menu">
