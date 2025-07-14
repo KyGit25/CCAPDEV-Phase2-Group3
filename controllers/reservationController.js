@@ -281,3 +281,48 @@ exports.removeReservation = async (req, res) => {
     res.status(500).send('Error removing reservation');
   }
 };
+
+exports.getReserveForm = async (req, res) => {
+  try {
+    const labId = req.params.labId;
+    const lab = await Lab.findById(labId);
+    
+    if (!lab) {
+      return res.status(404).send('Lab not found');
+    }
+    
+    const selectedDate = req.query.date || new Date().toISOString().split('T')[0];
+    const selectedTime = req.query.time || '09:00';
+    
+    // Generate time slots
+    const timeSlots = [];
+    for (let hour = 9; hour < 18; hour++) {
+      for (let minute = 0; minute < 60; minute += 30) {
+        const timeValue = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        timeSlots.push({
+          value: timeValue,
+          label: `${timeValue} - ${hour === 17 && minute === 30 ? '18:00' : (minute === 30 ? (hour + 1).toString().padStart(2, '0') + ':00' : hour.toString().padStart(2, '0') + ':30')}`,
+          selected: timeValue === selectedTime
+        });
+      }
+    }
+    
+    const today = new Date().toISOString().split('T')[0];
+    const maxDate = new Date();
+    maxDate.setDate(maxDate.getDate() + 7);
+    const maxDateStr = maxDate.toISOString().split('T')[0];
+    
+    res.render('reservation/reserve', {
+      lab,
+      selectedDate,
+      selectedTime,
+      timeSlots,
+      today,
+      maxDate: maxDateStr,
+      title: `Reserve - ${lab.name}`
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error loading reservation form');
+  }
+};
