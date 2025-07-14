@@ -1,0 +1,22 @@
+{
+  "name": "lab-reservation-system",
+  "version": "1.0.0",
+  "description": "DLSU Lab Reservation System",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "seed": "node seed/seed.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "express-handlebars": "^8.0.3",
+    "mongoose": "^8.16.3",
+    "express-session": "^1.18.0",
+    "body-parser": "^1.20.2",
+    "multer": "^1.4.5-lts.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

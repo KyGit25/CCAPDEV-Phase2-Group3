@@ -1,0 +1,179 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1>{{lab.name}}</h1>
+    <p class="text-muted">{{lab.description}}</p>
+  </div>
+  <div>
+    <a href="/lab/list" class="btn btn-secondary">Back to Labs</a>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Select Date & Time</h5>
+      </div>
+      <div class="card-body">
+        <form id="dateTimeForm">
+          <div class="mb-3">
+            <label for="selectedDate" class="form-label">Date</label>
+            <input type="date" class="form-control" id="selectedDate" name="selectedDate" 
+                   min="{{today}}" max="{{maxDate}}" value="{{selectedDate}}" required>
+          </div>
+          <div class="mb-3">
+            <label for="selectedTime" class="form-label">Time Slot</label>
+            <select class="form-control" id="selectedTime" name="selectedTime" required>
+              <option value="">Select time slot</option>
+              {{#each timeSlots}}
+                <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>
+                  {{this.label}}
+                </option>
+              {{/each}}
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Update View</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Seat Availability</h5>
+        <small class="text-muted">{{formatDate selectedDate}} at {{selectedTimeLabel}}</small>
+      </div>
+      <div class="card-body">
+        <div class="row mb-3">
+          <div class="col-md-12">
+            <div class="d-flex gap-3 align-items-center">
+              <div class="d-flex align-items-center">
+                <div class="seat available" style="width: 20px; height: 20px; margin-right: 5px;"></div>
+                <small>Available</small>
+              </div>
+              <div class="d-flex align-items-center">
+                <div class="seat occupied" style="width: 20px; height: 20px; margin-right: 5px;"></div>
+                <small>Occupied</small>
+              </div>
+              <div class="d-flex align-items-center">
+                <div class="seat selected" style="width: 20px; height: 20px; margin-right: 5px;"></div>
+                <small>Selected</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="seat-grid">
+          {{#each seats}}
+            <div class="seat {{this.status}}" data-seat="{{this.number}}" 
+                 {{#if this.available}}onclick="selectSeat({{this.number}})"{{/if}}>
+              {{this.number}}
+            </div>
+          {{/each}}
+        </div>
+        
+        {{#if user}}
+          {{#if (eq user.role 'student')}}
+            <div class="mt-4">
+              <form action="/reservation/reserve" method="POST" id="reservationForm">
+                <input type="hidden" name="labId" value="{{lab._id}}">
+                <input type="hidden" name="selectedDate" value="{{selectedDate}}">
+                <input type="hidden" name="selectedTime" value="{{selectedTime}}">
+                <input type="hidden" name="selectedSeats" id="selectedSeats" value="">
+                
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="isAnonymous" name="isAnonymous">
+                    <label class="form-check-label" for="isAnonymous">
+                      Reserve anonymously
+                    </label>
+                  </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" id="reserveBtn" disabled>
+                  Reserve Selected Seats
+                </button>
+              </form>
+            </div>
+          {{/if}}
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let selectedSeats = [];
+
+function selectSeat(seatNumber) {
+  const seatElement = document.querySelector(`[data-seat="${seatNumber}"]`);
+  if (seatElement.classList.contains('selected')) {
+    seatElement.classList.remove('selected');
+    seatElement.classList.add('available');
+    selectedSeats = selectedSeats.filter(seat => seat !== seatNumber);
+  } else {
+    seatElement.classList.remove('available');
+    seatElement.classList.add('selected');
+    selectedSeats.push(seatNumber);
+  }
+  
+  document.getElementById('selectedSeats').value = selectedSeats.join(',');
+  document.getElementById('reserveBtn').disabled = selectedSeats.length === 0;
+}
+
+document.getElementById('dateTimeForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const date = document.getElementById('selectedDate').value;
+  const time = document.getElementById('selectedTime').value;
+  window.location.href = `/lab/availability/{{lab._id}}?date=${date}&time=${time}`;
+});
+</script>
+    
+    if (date && time) {
+        window.location.href = `/lab/${labId}/availability?date=${date}&time=${time}`;
+    }
+}
+
+function reserveSeat(seatNumber) {
+    const date = document.getElementById('dateInput').value;
+    const time = document.getElementById('timeInput').value;
+    const labId = '{{lab._id}}';
+    
+    if (date && time) {
+        // Create reservation form
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/reservation/create';
+        
+        // Add hidden fields
+        const fields = [
+            { name: 'labId', value: labId },
+            { name: 'seatNumber', value: seatNumber },
+            { name: 'date', value: date },
+            { name: 'time', value: time }
+        ];
+        
+        fields.forEach(field => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = field.name;
+            input.value = field.value;
+            form.appendChild(input);
+        });
+        
+        document.body.appendChild(form);
+        form.submit();
+    } else {
+        alert('Please select both date and time');
+    }
+}
+
+function reserveForStudent(seatNumber) {
+    const studentEmail = prompt('Enter student email:');
+    if (studentEmail) {
+        // Handle technician reservation for student
+        reserveSeat(seatNumber);
+    }
+}
+</script>
