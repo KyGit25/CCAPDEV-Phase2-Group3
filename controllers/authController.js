@@ -15,9 +15,10 @@ exports.getRegister = (req, res) => {
 };
 
 exports.postRegister = async (req, res) => {
-  const { email, password, confirmPassword, role, description } = req.body;
+  const { email, password, confirmPassword, description } = req.body;
+  const role = 'student'; // Default role for registration
 
-  if (!email || !password || !role) {
+  if (!email || !password) {
     return res.render('auth/register', {
       title: 'Register',
       isAuth: true,
