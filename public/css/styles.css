@@ -30,7 +30,7 @@ body::before {
 
 nav{
   background-color: rgba(0, 0, 0, 0.9);
-  padding: 10px 15px;
+  padding: 10px 20px;
   position: relative;
   z-index: 1000;
   backdrop-filter: blur(10px);
@@ -48,14 +48,14 @@ nav{
   font-size: 18px;
   font-weight: 600;
   position: relative;
-  top: -10px;
+  top: 5px;
   left: 15px;
 }
 
 .link-container{
   float: right;
   position: relative;
-  top: 10px;
+  top: 5px;
 }
 
 .link{
@@ -523,7 +523,6 @@ table {
   border-color: #0056b3;
 }
 
-/* Seat tooltip styling */
 .seat-tooltip {
   position: absolute;
   bottom: 100%;
